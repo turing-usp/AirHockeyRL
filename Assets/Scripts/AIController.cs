@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
 
-public class PusherController : MonoBehaviour
+public class AIController : MonoBehaviour
 {
     private Rigidbody _rigidbody;
     [SerializeField] private int mass = 100;
     [SerializeField] private float speed = 3;
+
+    public Transform puck;
 
     public float xMin, xMax; // Boundaries for the pusher
 
@@ -18,8 +20,14 @@ public class PusherController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float moveZ = Input.GetAxis("Vertical");
-        float moveX = Input.GetAxis("Horizontal");
+        Vector3 targetPosition = new Vector3(puck.position.x, puck.position.y, puck.position.z);
+        if (targetPosition.x < xMin || targetPosition.x > xMax)
+        {
+            targetPosition.x = (xMin - xMax) / 2;
+        }
+
+        float moveX = targetPosition.x - transform.position.x;
+        float moveZ = targetPosition.z - transform.position.z;
 
         Vector3 speedVector = new Vector3(moveX, 0.0f, moveZ);
         speedVector = speedVector.normalized * speed;
