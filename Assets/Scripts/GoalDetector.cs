@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class GoalDetector : MonoBehaviour
 {
@@ -9,10 +10,22 @@ public class GoalDetector : MonoBehaviour
         if (other.CompareTag("Puck"))
         {
             // Update score
-            ScoreManager.Instance.AddScore(scoringPlayer);
+            bool done = ScoreManager.Instance.AddScore(scoringPlayer);
 
-            // Reset puck and pushers position
-            GameManager.Instance.ResetPositions();
+            // Start the coroutine to wait before resetting
+            StartCoroutine(WaitAndReset(done));
         }
+    }
+
+    private IEnumerator WaitAndReset(bool resetScore)
+    {
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(3);
+
+        // Reset puck and pushers position
+        GameManager.Instance.ResetPositions();
+
+        if (resetScore)
+            ScoreManager.Instance.ResetScore();
     }
 }

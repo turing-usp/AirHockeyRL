@@ -23,7 +23,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void AddScore(string scoringPlayer)
+    public bool AddScore(string scoringPlayer)
     {
         if (scoringPlayer == "Player1")
         {
@@ -35,5 +35,20 @@ public class ScoreManager : MonoBehaviour
             P2Score++;
             P2ScoreText.text = P2Score.ToString();
         }
+
+        if (P1Score >= 7 || P2Score >= 7)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void ResetScore()
+    {
+        P1Score = 0;
+        P1ScoreText.text = P1Score.ToString();
+        P2Score = 0;
+        P2ScoreText.text = P2Score.ToString();
     }
 }
