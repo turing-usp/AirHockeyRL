@@ -428,6 +428,9 @@ MonoBehaviour:
   speed: 2
   xMin: 0
   xMax: 42
+  tableLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &249887815 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}

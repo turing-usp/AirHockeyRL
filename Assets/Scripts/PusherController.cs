@@ -8,15 +8,27 @@ public class PusherController : MonoBehaviour
     [SerializeField] private float speed = 3;
 
     public float xMin, xMax; // Boundaries for the pusher
+    public LayerMask tableLayer; // Layer for detecting mouse hits on the table
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Camera mainCamera;
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        mainCamera = Camera.main; // Cache the main camera
     }
 
-    // Update is called once per frame
     void Update()
+    {
+        HandleKeyboardMovement();
+        HandleMouseMovement();
+
+        // Clamp the position
+        float clampedX = Mathf.Clamp(transform.position.x, xMin, xMax);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+    }
+
+    private void HandleKeyboardMovement()
     {
         float moveZ = Input.GetAxis("Vertical");
         float moveX = Input.GetAxis("Horizontal");
@@ -24,10 +36,24 @@ public class PusherController : MonoBehaviour
         Vector3 speedVector = new Vector3(moveX, 0.0f, moveZ);
         speedVector = speedVector.normalized * speed;
         _rigidbody.linearVelocity = speedVector;
+    }
 
-        // Clamp the position
-        float clampedX = Mathf.Clamp(transform.position.x, xMin, xMax);
-        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+    private void HandleMouseMovement()
+    {
+        if (Input.GetMouseButton(0)) // Check if the left mouse button is held
+        {
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tableLayer))
+            {
+                Vector3 targetPosition = hit.point;
+                targetPosition.y = transform.position.y; // Keep the pusher on the same vertical plane
+                targetPosition.x = Mathf.Clamp(targetPosition.x, xMin, xMax); // Clamp within bounds
+
+                // Move the pusher towards the target position
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                _rigidbody.linearVelocity = direction * speed;
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
