@@ -1,0 +1,57 @@
+{
+    "AirHockey": {
+        "elo": -109.64498455596772,
+        "checkpoints": [
+            {
+                "steps": 16481,
+                "file_path": "results\\Experiment18\\AirHockey\\AirHockey-16481.onnx",
+                "reward": -79.80891637284627,
+                "creation_time": 1745888344.1335418,
+                "auxillary_file_paths": [
+                    "results\\Experiment18\\AirHockey\\AirHockey-16481.pt"
+                ]
+            },
+            {
+                "steps": 88732,
+                "file_path": "results\\Experiment18\\AirHockey\\AirHockey-88732.onnx",
+                "reward": null,
+                "creation_time": 1745889014.885321,
+                "auxillary_file_paths": [
+                    "results\\Experiment18\\AirHockey\\AirHockey-88732.pt"
+                ]
+            },
+            {
+                "steps": 499993,
+                "file_path": "results\\Experiment18\\AirHockey\\AirHockey-499993.onnx",
+                "reward": -55.58981485720034,
+                "creation_time": 1745942776.215823,
+                "auxillary_file_paths": [
+                    "results\\Experiment18\\AirHockey\\AirHockey-499993.pt"
+                ]
+            },
+            {
+                "steps": 835008,
+                "file_path": "results\\Experiment18\\AirHockey\\AirHockey-835008.onnx",
+                "reward": -48.291666454739044,
+                "creation_time": 1745944400.250982,
+                "auxillary_file_paths": [
+                    "results\\Experiment18\\AirHockey\\AirHockey-835008.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 835008,
+            "file_path": "results\\Experiment18\\AirHockey.onnx",
+            "reward": -48.291666454739044,
+            "creation_time": 1745944400.250982,
+            "auxillary_file_paths": [
+                "results\\Experiment18\\AirHockey\\AirHockey-835008.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

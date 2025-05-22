@@ -1,0 +1,66 @@
+{
+    "AirHockey": {
+        "checkpoints": [
+            {
+                "steps": 5999802,
+                "file_path": "results\\Experiment22\\AirHockey\\AirHockey-5999802.onnx",
+                "reward": 5.266437629237771,
+                "creation_time": 1746121182.6533055,
+                "auxillary_file_paths": [
+                    "results\\Experiment22\\AirHockey\\AirHockey-5999802.pt"
+                ]
+            },
+            {
+                "steps": 6019101,
+                "file_path": "results\\Experiment22\\AirHockey\\AirHockey-6019101.onnx",
+                "reward": 0.008999999612569809,
+                "creation_time": 1746121358.1123257,
+                "auxillary_file_paths": [
+                    "results\\Experiment22\\AirHockey\\AirHockey-6019101.pt"
+                ]
+            },
+            {
+                "steps": 6499973,
+                "file_path": "results\\Experiment22\\AirHockey\\AirHockey-6499973.onnx",
+                "reward": 3.8029941459034764,
+                "creation_time": 1746122570.08274,
+                "auxillary_file_paths": [
+                    "results\\Experiment22\\AirHockey\\AirHockey-6499973.pt"
+                ]
+            },
+            {
+                "steps": 6999819,
+                "file_path": "results\\Experiment22\\AirHockey\\AirHockey-6999819.onnx",
+                "reward": 5.908187314867973,
+                "creation_time": 1746123560.8500497,
+                "auxillary_file_paths": [
+                    "results\\Experiment22\\AirHockey\\AirHockey-6999819.pt"
+                ]
+            },
+            {
+                "steps": 7303725,
+                "file_path": "results\\Experiment22\\AirHockey\\AirHockey-7303725.onnx",
+                "reward": 3.3406854060388382,
+                "creation_time": 1746124195.5850601,
+                "auxillary_file_paths": [
+                    "results\\Experiment22\\AirHockey\\AirHockey-7303725.pt"
+                ]
+            }
+        ],
+        "elo": -62.23943906585929,
+        "final_checkpoint": {
+            "steps": 7303725,
+            "file_path": "results\\Experiment22\\AirHockey.onnx",
+            "reward": 3.3406854060388382,
+            "creation_time": 1746124195.5850601,
+            "auxillary_file_paths": [
+                "results\\Experiment22\\AirHockey\\AirHockey-7303725.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

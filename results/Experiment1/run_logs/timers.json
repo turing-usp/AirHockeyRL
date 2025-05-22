@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1745853576",
+        "python_version": "3.10.12 | packaged by conda-forge | (main, Jun 23 2023, 22:34:57) [MSC v.1936 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\guilh\\anaconda3\\envs\\unity310\\Scripts\\mlagents-learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id=Experiment1 --env=.",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.2.2+cu121",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1745853579"
+    },
+    "total": 3.0147588000108954,
+    "count": 1,
+    "self": 0.007968499994603917,
+    "children": {
+        "run_training.setup": {
+            "total": 0.22129630000563338,
+            "count": 1,
+            "self": 0.22129630000563338
+        },
+        "TrainerController.start_learning": {
+            "total": 2.785494000010658,
+            "count": 1,
+            "self": 0.0005979000125080347,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 2.784884199994849,
+                    "count": 1,
+                    "self": 2.784884199994849
+                },
+                "trainer_threads": {
+                    "total": 1.0999792721122503e-06,
+                    "count": 1,
+                    "self": 1.0999792721122503e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 1.0800024028867483e-05,
+                    "count": 1,
+                    "self": 1.0800024028867483e-05
+                }
+            }
+        }
+    }
+}
