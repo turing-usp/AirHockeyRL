@@ -170,56 +170,14 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 80
+  m_Interpolate: 2
+  m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!4 &128521641 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
   m_PrefabInstance: {fileID: 358135137}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &128521643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128521636}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 923a4b8b8efc3754b9561d2abfa08605, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 2.5
-  accelRate: 25
-  decelRate: 18
-  localXMin: 0.15
-  localXMax: 2
---- !u!114 &128521644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128521636}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 416960dea7c4f404590b5eb5bf5dd49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 10000
-  maxSpeed: 2.5
-  accelRate: 25
-  decelRate: 18
-  xMin: 0.15
-  xMax: 2
-  halfTableWidth: 2
-  puck: {fileID: 759464510}
-  puckRb: {fileID: 759464502}
-  opponent: {fileID: 0}
 --- !u!114 &128521645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,13 +185,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128521636}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 12
+    VectorObservationSize: 13
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -245,7 +203,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: AirHockey
+  m_BehaviorName: AirHockeyBrain
   TeamId: 1
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -258,7 +216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128521636}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
@@ -273,7 +231,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128521636}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9226c8ac6e4666341b9d58e36a4de934, type: 3}
   m_Name: 
@@ -283,6 +241,31 @@ MonoBehaviour:
   puck: {fileID: 759464510}
   localXMin: 0.15
   localXMax: 2
+--- !u!114 &128521650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128521636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416960dea7c4f404590b5eb5bf5dd49f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 1000
+  maxSpeed: 2.5
+  accelRate: 25
+  decelRate: 18
+  xMin: 0.05
+  xMax: 2
+  halfTableWidth: 2
+  puck: {fileID: 0}
+  puckRb: {fileID: 0}
+  opponent: {fileID: 0}
 --- !u!1 &199812758
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,9 +295,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48a6e7c31016ed418942f64ae77cd4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environmentPrefab: {fileID: 813129200}
-  rows: 100
-  columns: 100
+  environmentTemplate: {fileID: 813129200}
+  rows: 5
+  columns: 5
   stepX: 4.5
   stepZ: 2.5
 --- !u!4 &199812760
@@ -556,7 +539,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.268
+      value: 1.19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -620,13 +603,10 @@ PrefabInstance:
       addedObject: {fileID: 128521645}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 128521644}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 128521643}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 128521648}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 128521650}
   m_SourcePrefab: {fileID: 100100000, guid: c4250756a9070f84b98dc0179dd096a5, type: 3}
 --- !u!1 &410087039
 GameObject:
@@ -848,6 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallBounceKick: 1
+  tableRoot: {fileID: 0}
   unstickSpeed: 0.15
 --- !u!4 &759464510 stripped
 Transform:
@@ -932,6 +913,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 181b4d0e0a1cdf04fa660c1291e888cf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1275875099}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 181b4d0e0a1cdf04fa660c1291e888cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1275875103}
   m_SourcePrefab: {fileID: 100100000, guid: 181b4d0e0a1cdf04fa660c1291e888cf, type: 3}
 --- !u!1 &795292286
 GameObject:
@@ -1124,7 +1108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   puck: {fileID: 759464510}
   bluePusher: {fileID: 1275875095}
-  orangePusher: {fileID: 128521644}
+  orangePusher: {fileID: 128521650}
+  blueAI: {fileID: 0}
+  orangeAI: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1548,7 +1534,6 @@ GameObject:
   - component: {fileID: 1233694636}
   - component: {fileID: 1233694635}
   - component: {fileID: 1233694634}
-  - component: {fileID: 1233694633}
   - component: {fileID: 1233694638}
   m_Layer: 0
   m_Name: GoalBlue
@@ -1557,19 +1542,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1233694633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1233694632}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c62892bc9bf124da96c70342178ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoringPlayer: Player2
 --- !u!65 &1233694634
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1672,8 +1644,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoringPlayer: Player2
-  rewardForScoring: 10
-  penaltyForConcede: -1
+  rewardForScoring: 10000
+  penaltyForConcede: -100
 --- !u!1 &1275875076 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 181b4d0e0a1cdf04fa660c1291e888cf, type: 3}
@@ -1725,8 +1697,8 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 80
+  m_Interpolate: 2
+  m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!114 &1275875091
 MonoBehaviour:
@@ -1788,7 +1760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 12
+    VectorObservationSize: 13
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -1800,7 +1772,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: AirHockey
+  m_BehaviorName: AirHockeyBrain
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -1821,6 +1793,23 @@ MonoBehaviour:
   DecisionPeriod: 5
   DecisionStep: 1
   TakeActionsBetweenDecisions: 1
+--- !u!114 &1275875103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275875076}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9226c8ac6e4666341b9d58e36a4de934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 100
+  speed: 3
+  puck: {fileID: 0}
+  localXMin: -2
+  localXMax: 0.05
 --- !u!1 &1328987763
 GameObject:
   m_ObjectHideFlags: 0
@@ -2284,7 +2273,6 @@ GameObject:
   - component: {fileID: 2120587475}
   - component: {fileID: 2120587474}
   - component: {fileID: 2120587473}
-  - component: {fileID: 2120587472}
   - component: {fileID: 2120587477}
   m_Layer: 0
   m_Name: GoalOrange
@@ -2293,19 +2281,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2120587472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2120587471}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c62892bc9bf124da96c70342178ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoringPlayer: Player1
 --- !u!65 &2120587473
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2408,8 +2383,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoringPlayer: Player1
-  rewardForScoring: 10
-  penaltyForConcede: -1
+  rewardForScoring: 10000
+  penaltyForConcede: -100
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

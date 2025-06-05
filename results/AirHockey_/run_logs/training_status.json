@@ -1,0 +1,65 @@
+{
+    "AirHockeyBrain": {
+        "checkpoints": [
+            {
+                "steps": 22999978,
+                "file_path": "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-22999978.onnx",
+                "reward": 200.29778652503842,
+                "creation_time": 1748905050.7336118,
+                "auxillary_file_paths": [
+                    "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-22999978.pt"
+                ]
+            },
+            {
+                "steps": 23499933,
+                "file_path": "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-23499933.onnx",
+                "reward": 179.30375124373526,
+                "creation_time": 1748905733.9928565,
+                "auxillary_file_paths": [
+                    "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-23499933.pt"
+                ]
+            },
+            {
+                "steps": 23999861,
+                "file_path": "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-23999861.onnx",
+                "reward": 281.4016304016113,
+                "creation_time": 1748906413.3965945,
+                "auxillary_file_paths": [
+                    "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-23999861.pt"
+                ]
+            },
+            {
+                "steps": 24499873,
+                "file_path": "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-24499873.onnx",
+                "reward": 358.7573748857547,
+                "creation_time": 1748907152.5740395,
+                "auxillary_file_paths": [
+                    "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-24499873.pt"
+                ]
+            },
+            {
+                "steps": 24606517,
+                "file_path": "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-24606517.onnx",
+                "reward": 215.20587878757053,
+                "creation_time": 1748907288.2145078,
+                "auxillary_file_paths": [
+                    "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-24606517.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 24606517,
+            "file_path": "results\\AirHockey_\\AirHockeyBrain.onnx",
+            "reward": 215.20587878757053,
+            "creation_time": 1748907288.2145078,
+            "auxillary_file_paths": [
+                "results\\AirHockey_\\AirHockeyBrain\\AirHockeyBrain-24606517.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

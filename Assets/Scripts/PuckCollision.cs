@@ -11,7 +11,9 @@ public class PuckCollisionHandler : MonoBehaviour
 {
     [Header("Wall feel (side walls only)")]
     [Tooltip("Meters / s added along the wall’s outward normal.")]
-    [SerializeField] private float wallBounceKick = 0.4f;
+    [SerializeField] private float wallBounceKick = 1.0f;
+    [Header("Table Root (arraste o Transform da mesa)")]
+    [SerializeField] private Transform tableRoot = null;
 
     [Tooltip("If the post-bounce speed is below this, force it outward at this speed to avoid sticking.")]
     [SerializeField] private float unstickSpeed = 0.15f;
@@ -19,6 +21,7 @@ public class PuckCollisionHandler : MonoBehaviour
     private Rigidbody rb;
 
     private void Awake() => rb = GetComponent<Rigidbody>();
+    private enum WallSide { Left, Right, Front, Back, Floor }
 
     /* ─────────────────── ENTER & STAY ─────────────────── */
 
@@ -33,42 +36,71 @@ public class PuckCollisionHandler : MonoBehaviour
     /* ─────────────────── TABLE ─────────────────── */
 
     private void HandleTableCollision(Collision col)
+{
+    if (tableRoot == null)
     {
-        Vector3 normal = col.contacts[0].normal;
-        Vector3 v = rb.linearVelocity;                     // cache
+        Debug.LogWarning("[PuckCollisionHandler] Arraste o TableRoot no Inspector.", this);
+        return;
+    }
 
-        /* ─── Side wall ─── */
-        if (Mathf.Abs(normal.y) < 0.99f)
+    // 1) Converta a normal mundial para o espaço local da mesa
+    Vector3 nLocal = tableRoot.InverseTransformDirection(col.contacts[0].normal).normalized;
+    WallSide side  = GetSide(nLocal);
+
+    Vector3 v = rb.linearVelocity; // cache
+
+    switch (side)
+    {
+        case WallSide.Floor:               // ---------- PISO ----------
+            v.y = 0f;
+            rb.linearVelocity = v;
+            break;
+
+        /* ---------- PAREDES LATERAIS ---------- */
+        case WallSide.Left:
+        case WallSide.Right:
+        case WallSide.Front:
+        case WallSide.Back:
         {
-            Vector3 nXZ = new Vector3(normal.x, 0f, normal.z);
-            nXZ.Normalize();
+            // normal 2-D no plano XZ local
+            Vector3 nXZ = new Vector3(nLocal.x, 0f, nLocal.z).normalized;
 
-            // Decompose & reflect
-            Vector3 vXZ = new Vector3(v.x, 0f, v.z);
-            Vector3 vPerp = Vector3.Project(vXZ, nXZ);
-            Vector3 vPara = vXZ - vPerp;
-            Vector3 refl = vPara - vPerp;                // perfect bounce
+            // decompor velocidade, refletir perfeitamente e adicionar "kick"
+            Vector3 vXZ   = new Vector3(v.x, 0f, v.z);
+            Vector3 vPerp = Vector3.Project(vXZ, nXZ);   // componente perpendicular
+            Vector3 vPara = vXZ - vPerp;                 // componente paralela
 
-            // Add the extra kick
-            refl += nXZ * wallBounceKick;
+            Vector3 refl  = vPara - vPerp;               // reflexão elástica
+            refl += nXZ * wallBounceKick;                // chute extra (SOMA, não multiplicação)
 
-            // Guarantee a minimum outward speed
+            // garantir velocidade mínima para não grudar
             if (refl.sqrMagnitude < unstickSpeed * unstickSpeed)
                 refl = nXZ * unstickSpeed;
 
-            // Re-assemble the final velocity
+            // remontar vetor 3-D (mantém Y zero)
             v.x = refl.x;
             v.z = refl.z;
-            v.y = 0f;                                     // stay on table
-            rb.linearVelocity = v;
-        }
-        /* ─── Floor ─── */
-        else
-        {
             v.y = 0f;
             rb.linearVelocity = v;
+            break;
         }
     }
+}
+
+/* ------------------------------------------------------- */
+/* -------------  helper que decide o lado --------------- */
+private WallSide GetSide(Vector3 nLocal)
+{
+    // Piso se a componente Y domina
+    if (Mathf.Abs(nLocal.y) > 0.7f)
+        return WallSide.Floor;
+
+    // Decide se a normal aponta mais para X ou Z
+    if (Mathf.Abs(nLocal.x) > Mathf.Abs(nLocal.z))
+        return nLocal.x > 0f ? WallSide.Right : WallSide.Left;
+    else
+        return nLocal.z > 0f ? WallSide.Back  : WallSide.Front;
+}
 
     /* ─────────────────── PUSHER ─────────────────── */
 

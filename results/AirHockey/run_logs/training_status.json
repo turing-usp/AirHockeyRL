@@ -1,0 +1,65 @@
+{
+    "AirHockeyBrain": {
+        "checkpoints": [
+            {
+                "steps": 3999956,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-3999956.onnx",
+                "reward": 4104.213057132478,
+                "creation_time": 1749066301.176931,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-3999956.pt"
+                ]
+            },
+            {
+                "steps": 4499971,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4499971.onnx",
+                "reward": 1927.0354507446289,
+                "creation_time": 1749067461.4788795,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4499971.pt"
+                ]
+            },
+            {
+                "steps": 4675959,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4675959.onnx",
+                "reward": 3622.7965663475325,
+                "creation_time": 1749067853.5152092,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4675959.pt"
+                ]
+            },
+            {
+                "steps": 4999963,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4999963.onnx",
+                "reward": 2801.8187326533453,
+                "creation_time": 1749072462.0661209,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-4999963.pt"
+                ]
+            },
+            {
+                "steps": 5486923,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-5486923.onnx",
+                "reward": null,
+                "creation_time": 1749074228.423716,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-5486923.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5486923,
+            "file_path": "results\\AirHockey\\AirHockeyBrain.onnx",
+            "reward": null,
+            "creation_time": 1749074228.423716,
+            "auxillary_file_paths": [
+                "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-5486923.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
