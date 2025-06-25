@@ -12,11 +12,11 @@ behaviors:
     network_settings:
       normalize:    true
       hidden_units: 512
-      num_layers:   5
+      num_layers:   6
     reward_signals:
       extrinsic:
         gamma:      0.99
         strength:   1.0
-    max_steps:     5e7         # total number of environment steps
-    time_horizon:  1000         # how many steps to collect before learning
+    max_steps:     1e8         # total number of environment steps
+    time_horizon:  100000         # how many steps to collect before learning
     summary_freq:  10000       # how often (in steps) to write TensorBoard stats

@@ -117,7 +117,7 @@ public class ArenaManager : MonoBehaviour
     private void ApplyModeToOneSide(GameObject go, AIController ai, int defaultTeamId)
     {
         float r = Random.value;
-        bool useAI = (r >= 0.99f);
+        bool useAI = (r >= 0.90f);
 
         var bp = go.GetComponent<BehaviorParameters>();
         var dr = go.GetComponent<DecisionRequester>();

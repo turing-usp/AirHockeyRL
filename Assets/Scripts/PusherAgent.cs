@@ -207,7 +207,7 @@ public class PusherAgent : Agent
 
         {
 
-            AddReward(-0.0015f); // Negative reward for puck on agent's side
+            AddReward(-0.00015f); // Negative reward for puck on agent's side
 
   }
 
@@ -215,15 +215,14 @@ public class PusherAgent : Agent
 
         {
 
-            AddReward(0.002f); // Positive reward for puck on opponent's side
+            AddReward(0.00015f); // Positive reward for puck on opponent's side
 
   }
         if (StepCount >= MaxStep - 1)
     {
         // 1) Punish both agents (optional, your choice of value)
-        AddReward(-100f);
-        if (opponent != null)
-            opponent.AddReward(-100f);
+        AddReward(-5f);
+        
 
         // 2) End both episodes immediately
         EndEpisode();
@@ -319,11 +318,11 @@ public class PusherAgent : Agent
     {
         if (c.collider.CompareTag("Puck"))
         {
-            AddReward(+5f);          // small bonus for the hitter
+            AddReward(+0.0005f);          // small bonus for the hitter
     
             // NEW: give the opponent a symmetric negative reward
             if (opponent != null)
-                opponent.AddReward(-3f);
+                opponent.AddReward(-0.0005f);
         }
  }
 
