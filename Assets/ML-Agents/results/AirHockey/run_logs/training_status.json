@@ -1,0 +1,29 @@
+{
+    "AirHockeyBrain": {
+        "checkpoints": [
+            {
+                "steps": 21633,
+                "file_path": "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-21633.onnx",
+                "reward": -3.4950000643730164,
+                "creation_time": 1753885941.6380825,
+                "auxillary_file_paths": [
+                    "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-21633.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 21633,
+            "file_path": "results\\AirHockey\\AirHockeyBrain.onnx",
+            "reward": -3.4950000643730164,
+            "creation_time": 1753885941.6380825,
+            "auxillary_file_paths": [
+                "results\\AirHockey\\AirHockeyBrain\\AirHockeyBrain-21633.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
