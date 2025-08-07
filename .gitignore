@@ -62,6 +62,9 @@ sysinfo.txt
 *.unitypackage
 *.app
 
+# Logs gigantes
+results/**/run_logs/
+*.log
 # Crashlytics generated file
 crashlytics-build.properties
 
