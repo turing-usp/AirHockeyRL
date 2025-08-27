@@ -166,8 +166,8 @@ public class PusherController : MonoBehaviour
         // Input axes are generally world-oriented (or view-oriented depending on project settings)
         // Assuming standard WASD/Arrows map to world X/Z:
         // Note: Horizontal axis usually maps to X, Vertical to Z in 3D. Adjust if needed.
-        float horizontalInput = Input.GetAxis("Horizontal"); // Typically A/D or Left/Right Arrow
-        float verticalInput = Input.GetAxis("Vertical");     // Typically W/S or Up/Down Arrow
+        float horizontalInput = Input.GetAxis("Vertical"); // Typically A/D or Left/Right ArrowVertical
+        float verticalInput = -Input.GetAxis("Horizontal");     // Typically W/S or Up/Down Arrow Horizontal
 
         // Create world direction vector based on input
         Vector3 worldInputAxis = new Vector3(horizontalInput, 0f, verticalInput);
