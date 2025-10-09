@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C8ABE6DE-5C0C-554C-8830-2DBCB865C8A8}</ProjectGuid>
+    <ProjectGuid>{891CBD8A-C72C-3A54-2CBD-128EFE2F9E7B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -65,7 +65,10 @@
     <Compile Include="Assets\Scripts\AIController.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\EnvironmentGridSpawner.cs" />
+    <Compile Include="Assets\Scripts\Menu\MainMenuUI.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Game\GameSetup.cs" />
+    <Compile Include="Assets\Scripts\shared\GameConfig.cs" />
     <Compile Include="Assets\Scripts\PusherAgent.cs" />
     <Compile Include="Assets\Scripts\ArenaManager.cs" />
     <Compile Include="Assets\Scripts\PusherController.cs" />

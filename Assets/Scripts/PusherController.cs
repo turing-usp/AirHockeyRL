@@ -18,11 +18,11 @@ public class PusherController : MonoBehaviour
     [Header("Invisible borders (LOCAL X relative to parent)")]
     [SerializeField] private float localXMin = -3f; // Assumes pusher is child of env root
     [SerializeField] private float localXMax = 3f; // Assumes pusher is child of env root
+    [SerializeField] Camera cam;
 
     /* ───────────── Internals ───────────── */
 
     private Rigidbody rb;
-    private Camera cam;
     private int tableLayerMask;
     private Transform environmentRoot; // Reference to the parent "Environment" object
 
@@ -31,8 +31,6 @@ public class PusherController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        cam = Camera.main; // Assuming one main camera is okay
-
         // Find the parent Environment object tagged "Env"
         environmentRoot = GetEnvironmentRoot(transform);
          if (environmentRoot == null)

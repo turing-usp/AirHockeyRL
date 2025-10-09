@@ -39,13 +39,13 @@ behaviors:
     keep_checkpoints: 5
     even_checkpoints: false
     max_steps: 100000000
-    time_horizon: 1000
+    time_horizon: 100000
     summary_freq: 10000
     threaded: false
     self_play: null
     behavioral_cloning: null
 env_settings:
-  env_path: D:\turing\AirHockeyRL-main\builds\AirHockeyRL.exe
+  env_path: null
   env_args: null
   base_port: 5005
   num_envs: 1
@@ -59,10 +59,10 @@ engine_settings:
   width: 84
   height: 84
   quality_level: 5
-  time_scale: 2.0
+  time_scale: 1.0
   target_frame_rate: -1
   capture_frame_rate: 60
-  no_graphics: true
+  no_graphics: false
   no_graphics_monitor: false
 environment_parameters: null
 checkpoint_settings:

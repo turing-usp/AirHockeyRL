@@ -18,6 +18,8 @@ public class ScoreManager : MonoBehaviour
 
     [Header("Popup message")]
     [SerializeField] TextMeshProUGUI goalPopup;
+    [SerializeField] TextMeshProUGUI SomeoneWin;
+    
     [Tooltip("Seconds the popup stays visible (0 = disabled).")]
     [SerializeField] float popupSeconds = 3f;
 
@@ -37,11 +39,13 @@ public class ScoreManager : MonoBehaviour
             if (p1Text)    p1Text.gameObject.SetActive(false);
             if (p2Text)    p2Text.gameObject.SetActive(false);
             if (goalPopup) goalPopup.gameObject.SetActive(false);
+            if (SomeoneWin) SomeoneWin.gameObject.SetActive(false);
             return;
         }
 
         UpdateTexts();
         if (goalPopup) goalPopup.gameObject.SetActive(false);
+        if (SomeoneWin) SomeoneWin.gameObject.SetActive(false);
     }
 
     /* ────────── Public API (used by GoalDetector) ────────── */
@@ -53,15 +57,23 @@ public class ScoreManager : MonoBehaviour
         if (who == "Player1")      // Blue scores
         {
             p1++;
-            ShowPopup("BLUE SCORED!",  new Color32( 54,173,255,255));
+            ShowPopup("BLUE SCORED!",  new Color32(54,173,255,255));
         }
         else if (who == "Player2") // Orange scores
         {
             p2++;
-            ShowPopup("ORANGE SCORED!", new Color32(255,140, 30,255));
+            ShowPopup("ORANGE SCORED!", new Color32(255,140,30,255));
         }
 
         UpdateTexts();
+        if(p1 >= pointsToWin){
+            ShowPopup2("BLUE WINS!",  new Color32(54,173,255,255));
+        }
+
+        if(p2 >= pointsToWin){
+            ShowPopup2("ORANGE WINS!", new Color32(255,140, 30,255));
+        }
+
         return (p1 >= pointsToWin || p2 >= pointsToWin);
     }
 
@@ -100,4 +112,26 @@ public class ScoreManager : MonoBehaviour
         goalPopup.gameObject.SetActive(false);
         popupRoutine = null;
     }
+
+
+    void ShowPopup2(string msg, Color col)
+    {
+        if (!uiEnabled || popupSeconds <= 0f || SomeoneWin == null) return;
+
+        if (popupRoutine != null) StopCoroutine(popupRoutine);
+        popupRoutine = StartCoroutine(PopupRoutine(msg, col));
+    }
+
+    IEnumerator PopupRoutine2(string msg, Color col)
+    {
+        SomeoneWin.text  = msg;
+        SomeoneWin.color = col;
+        SomeoneWin.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(popupSeconds);
+
+        SomeoneWin.gameObject.SetActive(false);
+        popupRoutine = null;
+    }
+
 }

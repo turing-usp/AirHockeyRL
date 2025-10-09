@@ -15,6 +15,9 @@ public class GoalDetector : MonoBehaviour
     {
         arena = GetComponentInParent<ArenaManager>();
         score = GetComponentInParent<ScoreManager>();
+
+        if (arena == null) Debug.LogError("[GoalDetector] ArenaManager não encontrado nos pais!", this);
+        if (score == null) Debug.LogError("[GoalDetector] ScoreManager não encontrado nos pais!", this);
     }
 
     void OnTriggerEnter(Collider other)
