@@ -57,3 +57,15 @@ crashlytics-build.properties
 # Auto-generated temporary StreamingAssets
 [Aa]ssets/[Ss]treamingAssets/aa.meta
 [Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ML-Agents artifacts (reproducive outputs, usually not source code)
+results/**/run_logs/
+results/**/*.pt
+results/**/checkpoint.pt
+results/**/events.out.tfevents.*
+
+# Unity ML-Agents profiler timers
+Assets/ML-Agents/Timers/*_timers.json
+
+# Accidental local helper file created in terminal
+/conda

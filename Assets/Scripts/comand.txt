@@ -1,1 +1,1 @@
-mlagents-learn Assets/ML-Agents/Configs/air_hockey.yaml --env "D:\turing\AirHockeyRL-main\builds\AirHockeyRL.exe" --run-id AirHockey --time-scale 1 --resume
+python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
