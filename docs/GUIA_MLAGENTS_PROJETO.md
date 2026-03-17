@@ -10,16 +10,16 @@ Projeto de Air Hockey em Unity com:
 - multiplas arenas para acelerar coleta de experiencias.
 
 ### Cenas principais
-- `Assets/Scenes/MenuPrincipal.unity` (habilitada no Build Settings)
-- `Assets/Scenes/GameScene.unity` (habilitada no Build Settings)
-- `Assets/Scenes/SampleScene.unity` (cena de treino, desabilitada no Build Settings por padrao)
+- `unity/Assets/Scenes/MenuPrincipal.unity` (habilitada no Build Settings)
+- `unity/Assets/Scenes/GameScene.unity` (habilitada no Build Settings)
+- `unity/Assets/Scenes/SampleScene.unity` (cena de treino, desabilitada no Build Settings por padrao)
 
 ### Scripts centrais (ML)
-- `Assets/Scripts/PusherAgent.cs`
-- `Assets/Scripts/ArenaManager.cs`
-- `Assets/Scripts/RLGoalRewarder.cs`
-- `Assets/Scripts/EnvironmentGridSpawner.cs`
-- `Assets/ML-Agents/Configs/air_hockey.yaml`
+- `unity/Assets/Scripts/PusherAgent.cs`
+- `unity/Assets/Scripts/ArenaManager.cs`
+- `unity/Assets/Scripts/RLGoalRewarder.cs`
+- `unity/Assets/Scripts/EnvironmentGridSpawner.cs`
+- `unity/Assets/ML-Agents/Configs/air_hockey.yaml`
 
 ## 2) Requisitos
 
@@ -59,7 +59,7 @@ Se voce ja ativou o ambiente conda e quer instalar tudo nele:
 
 ```powershell
 conda activate ml_agents
-powershell -ExecutionPolicy Bypass -File .\setup_conda_mlagents.ps1 -EnvName ml_agents -UseActiveEnvironment
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_conda_mlagents.ps1 -EnvName ml_agents -UseActiveEnvironment
 ```
 
 ### Script de setup a partir de terminal normal (sem Anaconda Prompt)
@@ -68,13 +68,13 @@ O script agora tenta localizar `conda.exe` automaticamente (ex: `<ANACONDA_ROOT>
 Exemplo:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\setup_conda_mlagents.ps1 -EnvName ml_agents
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_conda_mlagents.ps1 -EnvName ml_agents
 ```
 
 Se o conda estiver em caminho diferente, passe manualmente:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\setup_conda_mlagents.ps1 -EnvName ml_agents -CondaExe "<ANACONDA_ROOT>\Scripts\conda.exe"
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_conda_mlagents.ps1 -EnvName ml_agents -CondaExe "<ANACONDA_ROOT>\Scripts\conda.exe"
 ```
 
 ### Diagnostico rapido (para colar no terminal e compartilhar saida)
@@ -91,11 +91,11 @@ conda run -n ml_agents python -m pip show mlagents mlagents-envs setuptools
 
 ## 3) Estrutura de Assets (resumo)
 
-- `Assets/ML-Agents/Configs`: YAML de treino (`air_hockey.yaml`)
-- `Assets/ML-Agents/results`: modelos ONNX importados no Unity (para inferencia)
-- `Assets/Scenes`: cenas do jogo e treino
-- `Assets/Scripts`: logica de gameplay, controle humano, IA e RL
-- `Assets/Models`, `Assets/Materials`, `Assets/Audios`: recursos visuais e de audio
+- `unity/Assets/ML-Agents/Configs`: YAML de treino (`air_hockey.yaml`)
+- `unity/Assets/ML-Agents/results`: modelos ONNX importados no Unity (para inferencia)
+- `unity/Assets/Scenes`: cenas do jogo e treino
+- `unity/Assets/Scripts`: logica de gameplay, controle humano, IA e RL
+- `unity/Assets/Models`, `unity/Assets/Materials`, `unity/Assets/Audios`: recursos visuais e de audio
 
 ## 4) Como o sistema de agentes funciona
 
@@ -135,7 +135,7 @@ Isso esta no metodo `ApplyModeToOneSide()`.
 
 ## 5) Setup de treino no projeto
 
-Cena recomendada para treino: `Assets/Scenes/SampleScene.unity`.
+Cena recomendada para treino: `unity/Assets/Scenes/SampleScene.unity`.
 
 Nessa cena:
 - `EnvironmentGridSpawner` esta ativo com `rows=3` e `columns=3`,
@@ -143,17 +143,17 @@ Nessa cena:
 - em varias arenas o `ScoreManager` fica com UI desativada (`uiEnabled=0`) para reduzir custo visual.
 
 Arquivo de config PPO:
-- `Assets/ML-Agents/Configs/air_hockey.yaml`
+- `unity/Assets/ML-Agents/Configs/air_hockey.yaml`
 - comportamento: `AirHockeyBrain`
 - `trainer_type: ppo`
 - `max_steps: 1e8`
 
 ### Duas builds recomendadas
 - Build de treino:
-  - Cena principal: `Assets/Scenes/SampleScene.unity`
+  - Cena principal: `unity/Assets/Scenes/SampleScene.unity`
   - Saida sugerida: `builds/Training/AirHockeyRL.exe`
 - Build de jogo:
-  - Cenas: `Assets/Scenes/MenuPrincipal.unity` e `Assets/Scenes/GameScene.unity`
+  - Cenas: `unity/Assets/Scenes/MenuPrincipal.unity` e `unity/Assets/Scenes/GameScene.unity`
   - Saida sugerida: `builds/Game/AirHockeyRL.exe`
 
 ## 6) Como treinar os agentes
@@ -166,7 +166,7 @@ python tools/train_menu.py
 ```
 
 Esse menu permite:
-- escolher o YAML base em `Assets/ML-Agents/Configs`
+- escolher o YAML base em `unity/Assets/ML-Agents/Configs`
 - ajustar rewards existentes (`reward_goal_scored`, `reward_goal_conceded`, etc)
 - escolher quantidade de mesas (`grid_rows`, `grid_columns`) com validacao de valor impar
 - escolher se quer treinar contra IA deterministica (que segue o puck) e a porcentagem de episodios disso
@@ -186,7 +186,7 @@ Quando o modo contra IA deterministica esta ativo, cada episodio selecionado usa
 3. No terminal, na raiz do projeto, rode:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20
 ```
 
 4. Aperte Play no Unity quando o trainer estiver aguardando conexao.
@@ -196,19 +196,19 @@ python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run
 2. Rode:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --no-graphics
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --no-graphics
 ```
 
 Exemplo de dois agentes com trainers diferentes:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey_split_example.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey_split --time-scale 20 --no-graphics
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey_split_example.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey_split --time-scale 20 --no-graphics
 ```
 
 ## Retomar treino
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --resume --time-scale 20
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --resume --time-scale 20
 ```
 
 ## TensorBoard
@@ -227,7 +227,7 @@ tensorboard --logdir results
 1. Pegue o modelo ONNX final em:
    - `results/<run-id>/AirHockeyBrain.onnx`
 2. Copie para dentro de `Assets` (exemplo):
-   - `Assets/ML-Agents/results/<run-id>/AirHockeyBrain.onnx`
+   - `unity/Assets/ML-Agents/results/<run-id>/AirHockeyBrain.onnx`
 3. No Unity, selecione o pusher laranja em `GameScene`.
 4. Em `Behavior Parameters`:
    - `Behavior Name`: `AirHockeyBrain`
@@ -241,14 +241,14 @@ No setup atual de `GameScene`, o lado azul usa controle humano (`PusherControlle
 Existem scripts `MainMenuUI` + `GameSetup` para trocar modelo por menu via `GameConfig`, porem hoje o menu principal ativo usa `MainMenuController`.
 
 Se quiser usar `MainMenuUI`, coloque modelos em:
-- `Assets/Resources/Models/*.onnx`
+- `unity/Assets/Resources/Models/*.onnx`
 
 ## 8) Observacoes importantes do estado atual
 
-- `Assets/Scripts/comand.txt` ja foi padronizado com comando relativo (`builds/AirHockeyRL.exe`).
+- `unity/Assets/Scripts/comand.txt` ja foi padronizado com comando relativo (`builds/training/AirHockeyRL.exe`).
 - Existem resultados em dois lugares:
   - `results/` (saida do trainer Python),
-  - `Assets/ML-Agents/results/` (modelos importados no Unity).
+  - `unity/Assets/ML-Agents/results/` (modelos importados no Unity).
 - O dropdown de dificuldade no menu (`EnemyAgentSelector`) esta configurado, mas no estado atual os tres campos (`easy/medium/hard`) apontam para o mesmo objeto.
 
 ## 9) Troubleshooting rapido

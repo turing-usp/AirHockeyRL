@@ -1,89 +1,80 @@
+<p align="center">
+  <img src="/utils/banner.png" alt="banner" width="800"/>
+</p>
+
 # AirHockeyRL
 
-Projeto Unity de Air Hockey com ML-Agents (PPO), com suporte a treino no Editor e em build.
+Ambiente de Air Hockey desenvolvido em Unity para treinamento de agentes com Reinforcement Learning utilizando ML-Agents (PPO), suportando execucao e treinamento diretamente no Unity.
+
+![Unity](https://img.shields.io/badge/Unity-6000.0.23f1-black?logo=unity)
+![Python](https://img.shields.io/badge/Python-3.10.12-blue?logo=python)
+![ML-Agents](https://img.shields.io/badge/ML--Agents-PPO-green)
 
 ## Requisitos
 
-- Unity `6000.0.23f1`
-- Python `3.10.1` ate `3.10.12` (recomendado `3.10.12`)
-- Conda (Anaconda ou Miniconda)
+| Ferramenta | Versao |
+|------------|--------|
+| Unity | `6000.0.23f1` |
+| Python | `3.10.x` (recomendado `3.10.12`) |
+| Conda | Anaconda ou Miniconda |
 
-## Setup rapido (terminal normal)
+## Instalacao
 
-Da raiz do repo:
+Na raiz do repositorio, execute:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\setup_conda_mlagents.ps1 -EnvName ml_agents
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_conda_mlagents.ps1 -EnvName ml_agents
 ```
 
-Se quiser usar ambiente ja ativado:
+Se o ambiente ja estiver ativado:
 
 ```powershell
 conda activate ml_agents
-powershell -ExecutionPolicy Bypass -File .\setup_conda_mlagents.ps1 -EnvName ml_agents -UseActiveEnvironment
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_conda_mlagents.ps1 -EnvName ml_agents -UseActiveEnvironment
 ```
 
-## Treino (Editor)
+## Treino
 
-1. Abra `Assets/Scenes/SampleScene.unity`.
-2. Rode no terminal:
+### No Editor
+
+1. Abra `unity/Assets/Scenes/SampleScene.unity` no Unity.
+2. No terminal, rode:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20 --resume
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20 --resume
 ```
 
-3. Aperte `Play` no Unity.
+3. Aperte **Play** no Unity.
+4. Acompanhe o progresso com TensorBoard:
 
-## Menu interativo de treino (YAML + rewards + matchup)
+```powershell
+tensorboard --logdir results
+```
 
-Com ambiente `ml_agents` ativo:
+### Menu de treino
+
+Se quiser montar o treino interativamente:
 
 ```powershell
 python tools/train_menu.py
 ```
 
-Esse menu permite:
-- escolher o YAML base em `Assets/ML-Agents/Configs`
-- ajustar rewards existentes (gol, penalidade, toque, timeout, etc)
-- escolher quantidade de mesas (`rows` e `columns`, somente valores impares)
-- escolher se quer treinar contra IA deterministica (que segue o puck) e a porcentagem de episodios disso
-- listar `run-id` ja existentes em `results/` e ativar `--resume` automaticamente ao selecionar um
-- criar um `run-id` novo quando quiser
-- escolher a build detectada em `builds/` direto no menu (ou digitar caminho manual)
-- escolher treino compartilhado (um behavior) ou split (BlueBrain vs OrangeBrain)
-- escolher trainer de cada lado
+O menu permite escolher YAML, rewards, grid de mesas, `run-id`, build e opcionalmente treinar contra a IA deterministica que segue o puck.
 
-Observacao: no stack atual do ML-Agents deste projeto, A2C e DQN nao sao trainers nativos.  
-No menu eles sao mapeados para PPO automaticamente.
-Quando o modo contra IA deterministica esta ativo, em cada episodio escolhido o lado da IA e sorteado (blue ou orange).
+### Via Build
 
-## Treino (Build)
-
-Se existir build em `builds/training/AirHockeyRL.exe`:
+Gere a build de treino em `builds/training/AirHockeyRL.exe` pelo Unity e depois rode:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
 ```
 
-Exemplo split com dois agentes (PPO vs SAC) ja pronto:
-
-```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey_split_example.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey_split --time-scale 20 --resume --no-graphics
-```
-
-## Duas builds recomendadas
-
-- Build de treino:
-  - Cena principal: `Assets/Scenes/SampleScene.unity`
-  - Salvar em: `builds/Training/AirHockeyRL.exe`
-
-- Build de jogo:
-  - Cenas: `Assets/Scenes/MenuPrincipal.unity` e `Assets/Scenes/GameScene.unity`
-  - Salvar em: `builds/Game/AirHockeyRL.exe`
+Considere usar `--no-graphics`, que acelera bastante o treino em build.
 
 ## Arquivos principais
 
-- `setup_conda_mlagents.ps1`
-- `setup_conda_mlagents.sh`
+- `scripts/setup_conda_mlagents.ps1`
+- `scripts/setup_conda_mlagents.sh`
 - `requirements-mlagents.txt`
-- `GUIA_MLAGENTS_PROJETO.md`
+- `docs/GUIA_MLAGENTS_PROJETO.md`
+- `tools/train_menu.py`

@@ -3,7 +3,7 @@
 Interactive training menu for ML-Agents.
 
 Features:
-- Choose a base YAML from Assets/ML-Agents/Configs
+- Choose a base YAML from the Unity ML-Agents config folder
 - Override existing reward values via environment_parameters
 - Choose shared training (single behavior) or split training (Blue vs Orange)
 - Choose trainer type per side (PPO/SAC/POCA). A2C/DQN are mapped to PPO.
@@ -25,7 +25,8 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CONFIG_DIR = REPO_ROOT / "Assets" / "ML-Agents" / "Configs"
+UNITY_PROJECT_ROOT = REPO_ROOT / "unity" if (REPO_ROOT / "unity" / "Assets").exists() else REPO_ROOT
+CONFIG_DIR = UNITY_PROJECT_ROOT / "Assets" / "ML-Agents" / "Configs"
 GENERATED_DIR = CONFIG_DIR / "generated"
 RESULTS_DIR = REPO_ROOT / "results"
 BUILDS_DIR = REPO_ROOT / "builds"
@@ -266,7 +267,7 @@ def main() -> int:
 
     configs = list_base_configs()
     if not configs:
-        print("Nenhum YAML encontrado em Assets/ML-Agents/Configs.")
+        print(f"Nenhum YAML encontrado em {CONFIG_DIR.relative_to(REPO_ROOT)}.")
         return 1
 
     config_idx = ask_choice(

@@ -7,7 +7,8 @@ FORCE_RECREATE="${FORCE_RECREATE:-0}"
 USE_ACTIVE_ENV="${USE_ACTIVE_ENV:-0}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REQUIREMENTS_FILE="${SCRIPT_DIR}/requirements-mlagents.txt"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REQUIREMENTS_FILE="${REPO_ROOT}/requirements-mlagents.txt"
 
 if ! command -v conda >/dev/null 2>&1; then
   echo "Conda nao encontrado no PATH. Abra um terminal com Anaconda/Miniconda." >&2
@@ -89,4 +90,4 @@ if [[ "${USE_ACTIVE_ENV}" != "1" ]]; then
   echo "  conda activate ${ENV_NAME}"
 fi
 echo "Exemplo de treino:"
-echo "  python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
+echo "  python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
