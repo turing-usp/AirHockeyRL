@@ -1,30 +1,56 @@
-using UnityEngine;
 using Unity.MLAgents;
+using UnityEngine;
 
-/// Handles goal-reward logic for **one** arena (placed on each goal trigger).
+/// <summary>
+/// Goal-trigger reward logic for one arena.
+/// Place this on each goal trigger collider.
+/// </summary>
 [RequireComponent(typeof(Collider))]
 public class RLGoalRewarder : MonoBehaviour
 {
     [Header("Who scores when this trigger is hit")]
-    public string scoringPlayer = "Player1";   // "Player1" or "Player2"
+    public string scoringPlayer = "Player1"; // "Player1" or "Player2"
 
-    [Header("Reward values")]
-    [SerializeField] float rewardForScoring  = +1f;
-    [SerializeField] float penaltyForConcede = -1f;
+    [Header("Reward Values")]
+    [SerializeField] private float rewardForScoring = 1f;
+    [SerializeField] private float penaltyForConcede = -1f;
 
-    ArenaManager arena;        // parent context
+    [Header("Environment Reward Overrides")]
+    [SerializeField] private bool useEnvironmentRewardOverrides = true;
+    [SerializeField] private string rewardForScoringParam = "reward_goal_scored";
+    [SerializeField] private string penaltyForConcedeParam = "reward_goal_conceded";
 
-    void Awake() => arena = GetComponentInParent<ArenaManager>();
+    private ArenaManager arena;
+    private bool overridesLoaded;
 
-    void OnTriggerEnter(Collider other)
+    private void Awake()
+    {
+        arena = GetComponentInParent<ArenaManager>();
+    }
+
+    private void Start()
+    {
+        LoadRewardOverrides();
+    }
+
+    private void LoadRewardOverrides()
+    {
+        if (overridesLoaded || !useEnvironmentRewardOverrides) return;
+
+        EnvironmentParameters env = Academy.Instance.EnvironmentParameters;
+        rewardForScoring = env.GetWithDefault(rewardForScoringParam, rewardForScoring);
+        penaltyForConcede = env.GetWithDefault(penaltyForConcedeParam, penaltyForConcede);
+        overridesLoaded = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Puck")) return;
 
-        /* 1 – reset only this table */
+        LoadRewardOverrides();
         arena.ResetArena();
 
-        /* 2 – reward or penalise the two agents that belong to this arena */
-        foreach (var agent in arena.GetComponentsInChildren<PusherAgent>())
+        foreach (PusherAgent agent in arena.GetComponentsInChildren<PusherAgent>())
         {
             bool scored =
                 (scoringPlayer == "Player1" && agent.CompareTag("Blue")) ||

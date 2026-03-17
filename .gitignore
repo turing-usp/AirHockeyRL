@@ -8,7 +8,6 @@
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
-[Bb]uilds/
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
@@ -43,6 +42,7 @@ ExportedObj/
 *.aab
 *.app
 *.unitypackage
+builds/**/AirHockeyRL_BurstDebugInformation_DoNotShip/
 
 # Logs gigantes do ML-Agents / TensorBoard
 results/**/run_logs/
@@ -69,3 +69,7 @@ Assets/ML-Agents/Timers/*_timers.json
 
 # Accidental local helper file created in terminal
 /conda
+
+# Generated configs from interactive training menu
+Assets/ML-Agents/Configs/generated/
+tools/__pycache__/

@@ -1,329 +1,201 @@
 using Unity.MLAgents;
-
 using Unity.MLAgents.Actuators;
-
 using Unity.MLAgents.Sensors;
-
 using UnityEngine;
 
-
-
 [RequireComponent(typeof(Rigidbody))]
-
 public class PusherAgent : Agent
-
 {
-
     [Header("Movement")]
-
-    [SerializeField] float maxSpeed = 2.5f; // Corrected to match actual max speed
-
- [SerializeField] float accelRate = 25f;
-
-    [SerializeField] float decelRate = 18f;
-
-
+    [SerializeField] private float maxSpeed = 2.5f;
+    [SerializeField] private float accelRate = 25f;
+    [SerializeField] private float decelRate = 18f;
 
     [Header("Borders (local X)")]
+    [SerializeField] private float xMin = -3f; // overridden in Initialize by tag
+    [SerializeField] private float xMax = 3f;  // overridden in Initialize by tag
+    [SerializeField] private float halfTableWidth = 2f;
 
-    [SerializeField] float xMin = -3f; // Will be overridden in Initialize
+    [Header("Rewards")]
+    [SerializeField] private bool useEnvironmentRewardOverrides = true;
+    [SerializeField] private float alivePenalty = -0.001f;
+    [SerializeField] private float puckSideRewardMagnitude = 0.00015f;
+    [SerializeField] private float puckTouchReward = 0.0005f;
+    [SerializeField] private float opponentTouchPenalty = -0.0005f;
+    [SerializeField] private float timeoutPenalty = -5f;
 
- [SerializeField] float xMax = 3f; // Will be overridden in Initialize
+    [Header("Reward Param Names")]
+    [SerializeField] private string alivePenaltyParam = "reward_step_alive";
+    [SerializeField] private string puckSideRewardParam = "reward_puck_side";
+    [SerializeField] private string puckTouchRewardParam = "reward_puck_touch";
+    [SerializeField] private string timeoutPenaltyParam = "reward_timeout";
 
- [SerializeField] float halfTableWidth = 2f; // Table half-width (x from -2 to 2)
-
-
-
- /* refs filled by ArenaManager */
-
- [HideInInspector] public Transform puck;
-
+    /* refs filled by ArenaManager */
+    [HideInInspector] public Transform puck;
     [HideInInspector] public Rigidbody puckRb;
-
     [HideInInspector] public PusherAgent opponent;
 
+    private Rigidbody rb;
+    private ArenaManager arena;
+    private int mirror = 1; // +1 Blue, -1 Orange
+    private bool rewardOverridesLoaded;
 
-
-    Rigidbody rb;
-
-    ArenaManager arena;
-
-    int mirror = 1; // +1 for Blue, 1 for Orange
-
-
-
- /* called once by ArenaManager */
-
- public void InitContext(ArenaManager ctx, PusherAgent opp)
-
+    public void InitContext(ArenaManager ctx, PusherAgent opp)
     {
-
         arena = ctx;
-
         opponent = opp;
-
         puck = ctx.puck;
-
         puckRb = ctx.puck.GetComponent<Rigidbody>();
-
     }
 
-
-
- /* --------------- ML-Agents life-cycle --------------- */
-
- public override void Initialize()
-
+    public override void Initialize()
     {
-
         rb = GetComponent<Rigidbody>();
-
-        rb.constraints = RigidbodyConstraints.FreezePositionY |
-
-                RigidbodyConstraints.FreezeRotation;
-
-
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
 
         mirror = CompareTag("Orange") ? -1 : 1;
 
-
-
-  // Set boundaries based on agent side
-
-  if (CompareTag("Blue"))
-
+        if (CompareTag("Blue"))
         {
-
-            xMin = -2f; // Blue: x from -2 to 0 (negative side)
-
-   xMax = 0f;
-
+            xMin = -2f;
+            xMax = 0f;
+        }
+        else
+        {
+            xMin = 0f;
+            xMax = 2f;
         }
 
-        else // Orange
-
-  {
-
-            xMin = 0f; // Orange: x from 0 to 2 (positive side)
-
-   xMax = 2f;
-
-        }
-
+        LoadRewardOverrides();
     }
-
-
 
     public override void OnEpisodeBegin()
-{
-        //
-
-    // Its own Rigidbody state is reset by ArenaManager.ResetArena()
-    if (rb != null) { // rb should be initialized in Initialize()
-         rb.linearVelocity = Vector3.zero;
-         rb.angularVelocity = Vector3.zero;
-    }
-}
-
-
-
- /* --------------- Observations --------------- */
-
- public override void CollectObservations(VectorSensor sensor)
-
     {
+        LoadRewardOverrides();
 
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+
+    private void LoadRewardOverrides()
+    {
+        if (rewardOverridesLoaded || !useEnvironmentRewardOverrides) return;
+
+        EnvironmentParameters env = Academy.Instance.EnvironmentParameters;
+        alivePenalty = env.GetWithDefault(alivePenaltyParam, alivePenalty);
+        puckSideRewardMagnitude = Mathf.Abs(env.GetWithDefault(puckSideRewardParam, puckSideRewardMagnitude));
+        puckTouchReward = env.GetWithDefault(puckTouchRewardParam, puckTouchReward);
+        timeoutPenalty = env.GetWithDefault(timeoutPenaltyParam, timeoutPenalty);
+
+        // keep symmetric sign convention: opponent gets negative when this agent touches puck.
+        opponentTouchPenalty = -Mathf.Abs(puckTouchReward);
+        rewardOverridesLoaded = true;
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
         sensor.AddObservation(NormPos(transform.localPosition));
-
         sensor.AddObservation(NormVel(rb.linearVelocity));
-
         sensor.AddObservation(mirror == 1 ? 0 : 1);
 
-        if (opponent)
-
+        if (opponent != null)
         {
-
             sensor.AddObservation(NormPos(opponent.transform.localPosition));
-
             sensor.AddObservation(NormVel(opponent.GetComponent<Rigidbody>().linearVelocity));
-
         }
-
-        else sensor.AddObservation(new float[4]);
-
-
+        else
+        {
+            sensor.AddObservation(new float[4]);
+        }
 
         sensor.AddObservation(NormPos(puck.localPosition));
-
         sensor.AddObservation(NormVel(puckRb.linearVelocity));
-
     }
 
-
-
-    Vector2 NormPos(Vector3 w)
-
+    private Vector2 NormPos(Vector3 w)
     {
-
-  // Normalize x to -1 to 1 for Blue, 1 to -1 for Orange
-
-  float normalizedX = mirror * ((w.x / halfTableWidth) * 2 + (mirror == 1 ? 1 : -1));
-
-        float normalizedZ = mirror * w.z / halfTableWidth; // Z normalized by halfWidth
-
-  return new Vector2(normalizedX, normalizedZ);
-
+        float normalizedX = mirror * ((w.x / halfTableWidth) * 2 + (mirror == 1 ? 1 : -1));
+        float normalizedZ = mirror * w.z / halfTableWidth;
+        return new Vector2(normalizedX, normalizedZ);
     }
 
-
-
-    Vector2 NormVel(Vector3 v) => new(mirror * v.x / maxSpeed, mirror * v.z / maxSpeed); // Normalize by maxSpeed (2.5)
-
-
-
- /* --------------- Actions --------------- */
-
- public override void OnActionReceived(ActionBuffers act)
-
+    private Vector2 NormVel(Vector3 v)
     {
+        return new Vector2(mirror * v.x / maxSpeed, mirror * v.z / maxSpeed);
+    }
 
-        MoveByAction(act.DiscreteActions[0]);
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        MoveByAction(actions.DiscreteActions[0]);
 
+        AddReward(alivePenalty);
 
-
-  // Small existence penalty to encourage efficiency
-
-  AddReward(-0.001f);
-
-
-
-  // Reward based on puck position (using local position)
-
-  float puckX = puck.localPosition.x;
-
+        float puckX = puck.localPosition.x;
         bool puckOnAgentSide = (mirror == 1 && puckX < 0) || (mirror == -1 && puckX > 0);
+        AddReward(puckOnAgentSide ? -puckSideRewardMagnitude : puckSideRewardMagnitude);
 
-        if (puckOnAgentSide)
-
-        {
-
-            AddReward(-0.00015f); // Negative reward for puck on agent's side
-
-  }
-
-        else
-
-        {
-
-            AddReward(0.00015f); // Positive reward for puck on opponent's side
-
-  }
         if (StepCount >= MaxStep - 1)
-    {
-        // 1) Punish both agents (optional, your choice of value)
-        AddReward(-5f);
-        
-
-        // 2) End both episodes immediately
-        EndEpisode();
-        if (opponent != null)
-            opponent.EndEpisode();
-
-            // 3) Tell the ArenaManager to reset the puck + both agents once.
-            //    (Assumes you've added a public RequestResetFromAgent() in ArenaManager.)
-            arena.ResetArena();
-    }
-    }
-
-
-
-    void MoveByAction(int a)
-
-    {
-
-        Vector3 dir = a switch
-
         {
+            AddReward(timeoutPenalty);
+            EndEpisode();
 
-            1 => Vector3.forward,  // +Z
+            if (opponent != null)
+            {
+                opponent.AddReward(timeoutPenalty);
+                opponent.EndEpisode();
+            }
 
-   2 => Vector3.back,  // Z
+            if (arena != null)
+            {
+                arena.ResetArena();
+            }
+        }
+    }
 
-   3 => Vector3.left,  // X
-
-   4 => Vector3.right,  // +X
-
-   _ => Vector3.zero
-
+    private void MoveByAction(int action)
+    {
+        Vector3 dir = action switch
+        {
+            1 => Vector3.forward,
+            2 => Vector3.back,
+            3 => Vector3.left,
+            4 => Vector3.right,
+            _ => Vector3.zero
         };
 
-
-
         dir.x *= mirror;
-
         dir.z *= mirror;
 
-
-
         Vector3 target = dir * maxSpeed;
-
         float rate = dir == Vector3.zero ? decelRate : accelRate;
+        rb.linearVelocity = Vector3.MoveTowards(rb.linearVelocity, target, rate * Time.fixedDeltaTime);
 
-
-
-        rb.linearVelocity = Vector3.MoveTowards(rb.linearVelocity,
-
-                           target,
-
-                           rate * Time.fixedDeltaTime);
-
-
-
-  /* ---------- LOCAL-SPACE CLAMP ---------- */
-
-  Vector3 p = transform.localPosition;
-
+        Vector3 p = transform.localPosition;
         if (p.x < xMin)
-
         {
-
             p.x = xMin;
-
             rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, rb.linearVelocity.z);
-
-            rb.MovePosition(transform.parent.TransformPoint(p)); // Use Rigidbody for physics
-
-  }
-
+            rb.MovePosition(transform.parent.TransformPoint(p));
+        }
         else if (p.x > xMax)
-
         {
-
             p.x = xMax;
-
             rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, rb.linearVelocity.z);
-
-            rb.MovePosition(transform.parent.TransformPoint(p)); // Use Rigidbody for physics
-
-  }
-
+            rb.MovePosition(transform.parent.TransformPoint(p));
+        }
     }
 
-
-
- /* --------------- Touch reward --------------- */
-
- void OnCollisionEnter(Collision c)
-
+    private void OnCollisionEnter(Collision collision)
     {
-        if (c.collider.CompareTag("Puck"))
-        {
-            AddReward(+0.0005f);          // small bonus for the hitter
-    
-            // NEW: give the opponent a symmetric negative reward
-            if (opponent != null)
-                opponent.AddReward(-0.0005f);
-        }
- }
+        if (!collision.collider.CompareTag("Puck")) return;
 
+        AddReward(puckTouchReward);
+        if (opponent != null)
+        {
+            opponent.AddReward(opponentTouchPenalty);
+        }
+    }
 }

@@ -1,10 +1,12 @@
 /*******************************************************
  * EnvironmentGridSpawner.cs
- *  – Keeps the *scene* template in place (never moved)
- *  – Fills the rest of the grid around that anchor
- *  – Deletes only clones when you press ■ Stop
+ *  - Keeps the scene template in place (never moved)
+ *  - Fills the rest of the grid around that anchor
+ *  - Optionally reads grid size from ML-Agents environment parameters
  *******************************************************/
+using System;
 using UnityEngine;
+using Unity.MLAgents;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,31 +15,41 @@ using UnityEditor;
 [ExecuteAlways]
 public class EnvironmentGridSpawner : MonoBehaviour
 {
-    /* ─────────────  Inspector  ───────────── */
-
     [Header("Environment Template (scene object or prefab)")]
     public GameObject environmentTemplate;
 
-    [Header("Grid Size")]
-    [Min(1)] public int rows    = 3;
+    [Header("Grid Size (odd numbers only)")]
+    [Min(1)] public int rows = 3;
     [Min(1)] public int columns = 3;
 
-    [Header("Spacing (metres)")]
+    [Header("Grid Size via Environment Parameters")]
+    [SerializeField] private bool useEnvironmentGridOverrides = true;
+    [SerializeField] private string rowsParamName = "grid_rows";
+    [SerializeField] private string columnsParamName = "grid_columns";
+
+    [Header("Spacing (meters)")]
     public float stepX = 4.5f;
     public float stepZ = 2.5f;
 
-    /* ─────────────  Internals  ───────────── */
-
     private const string CLONE_PREFIX = "EnvClone_";
 
-    /* ─────────────  Life-cycle  ───────────── */
+    private void OnEnable()
+    {
+        EnforceOddGridSize();
+        ApplyGridOverridesFromEnvironment();
+        BuildGrid();
+    }
 
-    void OnEnable()  => BuildGrid();
-    void OnDisable() => ClearAllClones();
+    private void OnDisable()
+    {
+        ClearAllClones();
+    }
 
 #if UNITY_EDITOR
-    void OnValidate()
+    private void OnValidate()
     {
+        EnforceOddGridSize();
+
         if (environmentTemplate && !Application.isPlaying &&
             string.IsNullOrEmpty(Undo.GetCurrentGroupName()))
         {
@@ -45,18 +57,53 @@ public class EnvironmentGridSpawner : MonoBehaviour
             EditorApplication.delayCall += RebuildDelayed;
         }
     }
-    void RebuildDelayed()
+
+    private void RebuildDelayed()
     {
         if (this && environmentTemplate) BuildGrid();
     }
 #endif
 
     [ContextMenu("Rebuild Grid Now")]
-    public void ForceRebuildGrid() => BuildGrid();
+    public void ForceRebuildGrid()
+    {
+        EnforceOddGridSize();
+        ApplyGridOverridesFromEnvironment();
+        BuildGrid();
+    }
 
-    /* ─────────────  Helpers  ───────────── */
+    private void ApplyGridOverridesFromEnvironment()
+    {
+        if (!Application.isPlaying || !useEnvironmentGridOverrides) return;
 
-    void ClearAllClones()
+        try
+        {
+            EnvironmentParameters env = Academy.Instance.EnvironmentParameters;
+            int newRows = Mathf.RoundToInt(env.GetWithDefault(rowsParamName, rows));
+            int newCols = Mathf.RoundToInt(env.GetWithDefault(columnsParamName, columns));
+            rows = ClampOddAtLeastOne(newRows);
+            columns = ClampOddAtLeastOne(newCols);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[{name}] Could not read environment grid overrides: {ex.Message}");
+        }
+    }
+
+    private void EnforceOddGridSize()
+    {
+        rows = ClampOddAtLeastOne(rows);
+        columns = ClampOddAtLeastOne(columns);
+    }
+
+    private static int ClampOddAtLeastOne(int value)
+    {
+        int v = Mathf.Max(1, value);
+        if ((v % 2) == 0) v += 1;
+        return v;
+    }
+
+    private void ClearAllClones()
     {
         for (int i = transform.childCount - 1; i >= 0; --i)
         {
@@ -65,7 +112,7 @@ public class EnvironmentGridSpawner : MonoBehaviour
             {
 #if UNITY_EDITOR
                 if (Application.isPlaying) Destroy(t.gameObject);
-                else                        Undo.DestroyObjectImmediate(t.gameObject);
+                else Undo.DestroyObjectImmediate(t.gameObject);
 #else
                 Destroy(t.gameObject);
 #endif
@@ -73,38 +120,30 @@ public class EnvironmentGridSpawner : MonoBehaviour
         }
     }
 
-    void BuildGrid()
+    private void BuildGrid()
     {
         if (!environmentTemplate)
         {
-            Debug.LogWarning($"[{name}] Environment template not set — aborting.");
+            Debug.LogWarning($"[{name}] Environment template not set; aborting.");
             return;
         }
 
-        ClearAllClones();                                   // fresh slate
+        ClearAllClones();
 
-        /* 0 ─ Anchor: where is the *original* template?   *
-         *     If it's a scene object it stays put;        *
-         *     if it's a prefab we'll treat (0,0,0) as the *
-         *     anchor so the whole grid is cloned.         */
-        bool   templateIsSceneObj = environmentTemplate.scene.IsValid();
-        Vector3 anchorLocalPos    = templateIsSceneObj
-                                    ? environmentTemplate.transform.localPosition
-                                    : Vector3.zero;        // prefab case
-        float  baseY              = anchorLocalPos.y;      // keep table height
+        bool templateIsSceneObj = environmentTemplate.scene.IsValid();
+        Vector3 anchorLocalPos = templateIsSceneObj
+            ? environmentTemplate.transform.localPosition
+            : Vector3.zero;
 
-        /* 1 ─ Geometry helpers (same for odd/even grids) */
-        int  centreRow = rows    / 2;                      // ⌊n/2⌋
-        int  centreCol = columns / 2;
-        bool evenRow   = (rows    % 2) == 0;
-        bool evenCol   = (columns % 2) == 0;
+        int centreRow = rows / 2;
+        int centreCol = columns / 2;
+        bool evenRow = (rows % 2) == 0;
+        bool evenCol = (columns % 2) == 0;
 
-        /* 2 ─ Spawn every cell except the anchor itself  */
         for (int r = 0; r < rows; ++r)
         {
             for (int c = 0; c < columns; ++c)
             {
-                /* skip the cell occupied by the scene template */
                 if (templateIsSceneObj && r == centreRow && c == centreCol)
                     continue;
 
@@ -114,18 +153,20 @@ public class EnvironmentGridSpawner : MonoBehaviour
                 Vector3 localPos = anchorLocalPos + new Vector3(offX, 0f, offZ);
                 Vector3 worldPos = transform.TransformPoint(localPos);
 
-                GameObject clone = Instantiate(environmentTemplate,
-                                               worldPos,
-                                               environmentTemplate.transform.rotation,
-                                               transform);
+                GameObject clone = Instantiate(
+                    environmentTemplate,
+                    worldPos,
+                    environmentTemplate.transform.rotation,
+                    transform
+                );
                 clone.name = $"{CLONE_PREFIX}{r}_{c}";
 
-                /* Remove this script if it sneaks in with the prefab */
+                // Remove this script if it is present on cloned prefabs.
                 if (clone.TryGetComponent(out EnvironmentGridSpawner rogue))
                 {
 #if UNITY_EDITOR
                     if (Application.isPlaying) Destroy(rogue);
-                    else                        Undo.DestroyObjectImmediate(rogue);
+                    else Undo.DestroyObjectImmediate(rogue);
 #else
                     Destroy(rogue);
 #endif
@@ -133,25 +174,23 @@ public class EnvironmentGridSpawner : MonoBehaviour
             }
         }
 
-        /* 3 ─ Ensure the original template is parented to the spawner      *
-         *     (purely for organisational purposes and consistent movement) */
         if (templateIsSceneObj && environmentTemplate.transform.parent != transform)
             environmentTemplate.transform.SetParent(transform, true);
     }
 
-    /* ─────────────  Auto-clean on ■ Stop  ───────────── */
 #if UNITY_EDITOR
     static EnvironmentGridSpawner()
     {
         EditorApplication.playModeStateChanged -= OnPlayModeChanged;
         EditorApplication.playModeStateChanged += OnPlayModeChanged;
     }
-    static void OnPlayModeChanged(PlayModeStateChange change)
+
+    private static void OnPlayModeChanged(PlayModeStateChange change)
     {
         if (change != PlayModeStateChange.ExitingPlayMode) return;
 
         foreach (EnvironmentGridSpawner s in FindObjectsOfType<EnvironmentGridSpawner>())
-            s.ClearAllClones();                          // original arena stays
+            s.ClearAllClones();
     }
 #endif
 }

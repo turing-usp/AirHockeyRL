@@ -88,7 +88,8 @@ function Resolve-CondaExecutable {
     return $null
 }
 
-$requirementsFile = Join-Path $PSScriptRoot "requirements-mlagents.txt"
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$requirementsFile = Join-Path $repoRoot "requirements-mlagents.txt"
 if (-not (Test-Path $requirementsFile)) {
     throw "Arquivo nao encontrado: $requirementsFile"
 }
@@ -162,7 +163,7 @@ if (-not $UseActiveEnvironment) {
     Write-Host "Se 'conda' nao estiver no PATH no terminal atual, use:"
     Write-Host "  & `"$script:CondaExePath`" run -n $EnvName python -m mlagents.trainers.learn --help"
     Write-Host "Exemplo de treino sem ativar ambiente:"
-    Write-Host "  & `"$script:CondaExePath`" run -n $EnvName python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
+    Write-Host "  & `"$script:CondaExePath`" run -n $EnvName python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
 }
 Write-Host "Exemplo de treino:"
-Write-Host "  python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
+Write-Host "  python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --run-id AirHockey --time-scale 20"
