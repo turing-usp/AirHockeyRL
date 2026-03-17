@@ -34,13 +34,52 @@ python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run
 
 3. Aperte `Play` no Unity.
 
-## Treino (Build)
+## Menu interativo de treino (YAML + rewards + matchup)
 
-Se existir build em `builds/AirHockeyRL.exe`:
+Com ambiente `ml_agents` ativo:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
+python tools/train_menu.py
 ```
+
+Esse menu permite:
+- escolher o YAML base em `Assets/ML-Agents/Configs`
+- ajustar rewards existentes (gol, penalidade, toque, timeout, etc)
+- escolher quantidade de mesas (`rows` e `columns`, somente valores impares)
+- escolher se quer treinar contra IA deterministica (que segue o puck) e a porcentagem de episodios disso
+- listar `run-id` ja existentes em `results/` e ativar `--resume` automaticamente ao selecionar um
+- criar um `run-id` novo quando quiser
+- escolher a build detectada em `builds/` direto no menu (ou digitar caminho manual)
+- escolher treino compartilhado (um behavior) ou split (BlueBrain vs OrangeBrain)
+- escolher trainer de cada lado
+
+Observacao: no stack atual do ML-Agents deste projeto, A2C e DQN nao sao trainers nativos.  
+No menu eles sao mapeados para PPO automaticamente.
+Quando o modo contra IA deterministica esta ativo, em cada episodio escolhido o lado da IA e sorteado (blue ou orange).
+
+## Treino (Build)
+
+Se existir build em `builds/training/AirHockeyRL.exe`:
+
+```powershell
+python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
+```
+
+Exemplo split com dois agentes (PPO vs SAC) ja pronto:
+
+```powershell
+python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey_split_example.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey_split --time-scale 20 --resume --no-graphics
+```
+
+## Duas builds recomendadas
+
+- Build de treino:
+  - Cena principal: `Assets/Scenes/SampleScene.unity`
+  - Salvar em: `builds/Training/AirHockeyRL.exe`
+
+- Build de jogo:
+  - Cenas: `Assets/Scenes/MenuPrincipal.unity` e `Assets/Scenes/GameScene.unity`
+  - Salvar em: `builds/Game/AirHockeyRL.exe`
 
 ## Arquivos principais
 

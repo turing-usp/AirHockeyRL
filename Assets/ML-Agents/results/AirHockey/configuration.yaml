@@ -1,4 +1,4 @@
-default_settings: null
+ default_settings: null
 behaviors:
   AirHockeyBrain:
     trainer_type: ppo

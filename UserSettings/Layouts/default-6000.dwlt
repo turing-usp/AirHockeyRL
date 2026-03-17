@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1706.6667
     height: 976
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -44,7 +44,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1706.6667
+    width: 1706.6666
     height: 976
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -69,7 +69,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1706.6667
+    width: 1706.6666
     height: 36
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -91,7 +91,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 956
-    width: 1706.6667
+    width: 1706.6666
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -116,12 +116,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 36
-    width: 1706.6667
+    width: 1706.6666
     height: 920
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 113
+  controlID: 106
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -270,7 +270,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1264
     y: 0
-    width: 442.66675
+    width: 442.66663
     height: 920
   m_MinSize: {x: 276, y: 76}
   m_MaxSize: {x: 4001, y: 4026}
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 78.66667
+    y: 24
     width: 717
     height: 418
   m_SerializedDataModeController:
@@ -774,9 +774,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -0.13107716, y: -0.016624928, z: 0.244979}
+    m_Target: {x: -0.7073873, y: 0.41840756, z: 0.34385985}
     speed: 2
-    m_Value: {x: -0.13107716, y: -0.016624928, z: 0.244979}
+    m_Value: {x: -0.7073873, y: 0.41840756, z: 0.34385985}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -822,13 +822,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.2967697, y: 0.12257498, z: -0.03844973, w: 0.94629914}
+    m_Target: {x: 0.22564486, y: 0.20456432, z: -0.048530176, w: 0.9512834}
     speed: 2
-    m_Value: {x: -0.2967697, y: -0.122574985, z: 0.03844973, w: -0.94629914}
+    m_Value: {x: -0.22564487, y: -0.20456432, z: 0.04853018, w: -0.95128345}
   m_Size:
-    m_Target: 3.734347
+    m_Target: 4.9871736
     speed: 2
-    m_Value: 3.734347
+    m_Value: 4.9871736
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -881,7 +881,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 522.6667
+    y: 468
     width: 717
     height: 450
   m_SerializedDataModeController:
@@ -940,7 +940,7 @@ MonoBehaviour:
       width: 717
       height: 429
     m_Scale: {x: 1.5, y: 1.5}
-    m_Translation: {x: 358.5, y: 214.5}
+    m_Translation: {x: 358.5, y: 214.50003}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -948,7 +948,7 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -239
-      y: -143
+      y: -143.00002
       width: 478
       height: 286
     m_MinimalGUI: 1
@@ -980,8 +980,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 718
-    y: 78.66667
+    x: 719
+    y: 24
     width: 230
     height: 894
   m_SerializedDataModeController:
@@ -998,9 +998,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1caf0000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: f0faffff
+      m_ExpandedIDs: ca43ffffc444ffff104affff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1046,8 +1046,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 950
-    y: 78.66667
+    x: 951
+    y: 24
     width: 312
     height: 894
   m_SerializedDataModeController:
@@ -1083,14 +1083,14 @@ MonoBehaviour:
   m_StartGridSize: 64
   m_LastFolders: []
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: D:\turing\airhockey_rafa\AirHockeyRL
+  m_LastProjectPath: C:\Users\guilh\OneDrive\Desktop\turing\airhockey\AirHockeyRL
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: b0230000
     m_LastClickedID: 9136
-    m_ExpandedIDs: 000000001aaf00001caf0000
+    m_ExpandedIDs: 0000000020b4000022b40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1119,7 +1119,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000001aaf00001caf0000
+    m_ExpandedIDs: 0000000020b4000022b40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1198,9 +1198,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1264
-    y: 78.66667
-    width: 441.66675
+    x: 1265
+    y: 24
+    width: 441.66663
     height: 894
   m_SerializedDataModeController:
     m_DataMode: 0

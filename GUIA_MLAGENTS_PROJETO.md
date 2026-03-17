@@ -148,7 +148,37 @@ Arquivo de config PPO:
 - `trainer_type: ppo`
 - `max_steps: 1e8`
 
+### Duas builds recomendadas
+- Build de treino:
+  - Cena principal: `Assets/Scenes/SampleScene.unity`
+  - Saida sugerida: `builds/Training/AirHockeyRL.exe`
+- Build de jogo:
+  - Cenas: `Assets/Scenes/MenuPrincipal.unity` e `Assets/Scenes/GameScene.unity`
+  - Saida sugerida: `builds/Game/AirHockeyRL.exe`
+
 ## 6) Como treinar os agentes
+
+### Menu interativo para treino (escolher YAML, rewards e matchup)
+Com ambiente `ml_agents` ativo:
+
+```powershell
+python tools/train_menu.py
+```
+
+Esse menu permite:
+- escolher o YAML base em `Assets/ML-Agents/Configs`
+- ajustar rewards existentes (`reward_goal_scored`, `reward_goal_conceded`, etc)
+- escolher quantidade de mesas (`grid_rows`, `grid_columns`) com validacao de valor impar
+- escolher se quer treinar contra IA deterministica (que segue o puck) e a porcentagem de episodios disso
+- listar `run-id` ja existentes em `results/` e ativar `--resume` automaticamente ao selecionar um
+- criar `run-id` novo quando quiser
+- escolher build detectada em `builds/` direto no menu (ou informar caminho manual)
+- escolher treino compartilhado (um behavior) ou split (`BlueBrain` vs `OrangeBrain`)
+- escolher trainer de cada lado
+
+Observacao: nesta stack do projeto, `A2C` e `DQN` nao sao trainers nativos do ML-Agents.
+No menu, essas opcoes sao mapeadas para `PPO`.
+Quando o modo contra IA deterministica esta ativo, cada episodio selecionado usa IA em apenas um lado (blue ou orange), sorteado automaticamente.
 
 ## Opcao A: treino com Unity aberto (Editor)
 1. Abra `SampleScene` no Unity.
@@ -166,7 +196,13 @@ python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --run
 2. Rode:
 
 ```powershell
-python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --no-graphics
+python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --no-graphics
+```
+
+Exemplo de dois agentes com trainers diferentes:
+
+```powershell
+python -m mlagents.trainers.learn Assets/ML-Agents/Configs/air_hockey_split_example.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey_split --time-scale 20 --no-graphics
 ```
 
 ## Retomar treino
