@@ -71,6 +71,38 @@ python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml
 
 Considere usar `--no-graphics`, que acelera bastante o treino em build.
 
+## Builds prontas
+
+### Build de jogo
+
+Para jogar a build pronta:
+
+```powershell
+.\builds\game\AirHockeyRL.exe
+```
+
+Uso rapido:
+- clique em `JOGAR` no menu
+- o jogador controla o pusher azul
+- o pusher laranja usa o agente/modelo configurado no projeto
+- o controle principal e pelo mouse sobre a mesa; existe fallback por teclado no projeto
+
+### Build de treino
+
+A build de treino nao e para jogar manualmente. Ela deve ser usada pelo ML-Agents:
+
+```powershell
+python -m mlagents.trainers.learn unity/Assets/ML-Agents/Configs/air_hockey.yaml --env "builds/training/AirHockeyRL.exe" --run-id AirHockey --time-scale 20 --resume --no-graphics
+```
+
+Se preferir, rode:
+
+```powershell
+python tools/train_menu.py
+```
+
+e selecione a build de treino no menu.
+
 ## Arquivos principais
 
 - `scripts/setup_conda_mlagents.ps1`
